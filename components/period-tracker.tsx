@@ -186,40 +186,78 @@ export function PeriodTracker() {
             </CardTitle>
             <CardDescription>Track your cycle and notes</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              className="rounded-md border border-pink-100"
-              modifiersClassNames={{
-                selected:
-                  "bg-pink-500 text-white hover:bg-pink-500 hover:text-white focus:bg-pink-500 focus:text-white",
-              }}
-              modifiers={{
-                period: (date) => isInPeriod(date),
-                hasNote: (date) => hasNote(date),
-              }}
-              styles={{
-                day: (date) => {
-                  const isPeriodDay = isInPeriod(date)
-                  return {
-                    backgroundColor: isPeriodDay ? "rgb(251 207 232)" : undefined, // bg-pink-200
-                    borderRadius: isPeriodDay ? "9999px" : undefined,
-                  }
-                },
-              }}
-              components={{
-                Day: ({ date, ...props }) => (
-                  <div className="relative">
-                    <div {...props} />
-                    {hasNote(date) && (
-                      <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-purple-400 rounded-full" />
-                    )}
-                  </div>
-                ),
-              }}
-            />
+          <CardContent className="flex justify-center">
+            <div className="w-full max-w-sm">
+              <style jsx global>{`
+                .rdp-cell {
+                  text-align: center;
+                  padding: 0;
+                  height: 36px;
+                }
+                .rdp-day {
+                  width: 36px;
+                  height: 36px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  margin: 0 auto;
+                }
+                .rdp-day_today {
+                  font-weight: bold;
+                  border: 1px solid #ec4899;
+                }
+                .rdp-day_selected {
+                  background-color: #ec4899 !important;
+                  color: white !important;
+                }
+                .period-day {
+                  background-color: #fbcfe8;
+                  border-radius: 9999px;
+                }
+                .note-indicator {
+                  position: absolute;
+                  bottom: 2px;
+                  right: 2px;
+                  width: 4px;
+                  height: 4px;
+                  background-color: #c084fc;
+                  border-radius: 9999px;
+                }
+              `}</style>
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="rounded-md border border-pink-100"
+                classNames={{
+                  day_selected: "bg-pink-500 text-white hover:bg-pink-600",
+                  day_today: "border border-pink-500 font-bold",
+                  day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
+                  cell: "relative h-9 w-9 p-0 text-center text-sm focus-within:relative focus-within:z-20",
+                  head_cell: "text-pink-600 font-medium text-sm",
+                  nav_button: "text-pink-600 hover:bg-pink-100",
+                  caption: "text-pink-700 font-medium",
+                }}
+                components={{
+                  Day: ({ date, ...props }) => {
+                    const isPeriodDay = isInPeriod(date)
+                    const hasNoteForDay = hasNote(date)
+
+                    return (
+                      <div
+                        {...props}
+                        className={`relative flex items-center justify-center h-9 w-9 p-0 font-normal text-sm ${
+                          isPeriodDay ? "period-day" : ""
+                        } ${props.className || ""}`}
+                      >
+                        {date.getDate()}
+                        {hasNoteForDay && <div className="note-indicator" />}
+                      </div>
+                    )
+                  },
+                }}
+              />
+            </div>
           </CardContent>
         </Card>
 
