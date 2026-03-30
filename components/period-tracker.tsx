@@ -240,6 +240,8 @@ export function PeriodTracker() {
                 }}
                 components={{
                   Day: ({ date, className = "", ...rest }: any) => {
+                    if (!date) return null
+                    
                     const isPeriodDay = isInPeriod(date)
                     const hasNoteForDay = hasNote(date)
 
