@@ -239,16 +239,16 @@ export function PeriodTracker() {
                   caption: "text-pink-700 font-medium",
                 }}
                 components={{
-                  Day: ({ date, ...props }) => {
+                  Day: ({ date, className = "", ...rest }: any) => {
                     const isPeriodDay = isInPeriod(date)
                     const hasNoteForDay = hasNote(date)
 
                     return (
                       <div
-                        {...props}
+                        {...rest}
                         className={`relative flex items-center justify-center h-9 w-9 p-0 font-normal text-sm ${
                           isPeriodDay ? "period-day" : ""
-                        } ${props.className || ""}`}
+                        } ${className}`}
                       >
                         {date.getDate()}
                         {hasNoteForDay && <div className="note-indicator" />}
